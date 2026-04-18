@@ -1,0 +1,12 @@
+{
+  "name": "fsd-final-root",
+  "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "dev": "npm --prefix FSD-PBL-main run dev",
+    "build": "npm --prefix FSD-PBL-main install --no-fund --no-audit && npm --prefix FSD-PBL-main run build",
+    "test": "npm --prefix FSD-PBL-main install --no-fund --no-audit && npm --prefix FSD-PBL-main run test"
+  }
+}
