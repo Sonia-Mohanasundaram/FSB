@@ -1,4 +1,7 @@
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
+const DEV_FALLBACK_API_BASE = (
+  import.meta.env.VITE_DEV_FALLBACK_API_BASE_URL || "http://localhost:5000/api"
+).replace(/\/$/, "");
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -12,14 +15,33 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   const { method = "GET", body, token } = options;
   const authToken = token || localStorage.getItem("hms_token") || "";
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  const requestInit: RequestInit = {
     method,
     headers: {
       "Content-Type": "application/json",
       ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  };
+
+  const shouldRetryWithFallback = import.meta.env.DEV && API_BASE.startsWith("/");
+  const baseCandidates = shouldRetryWithFallback ? [API_BASE, DEV_FALLBACK_API_BASE] : [API_BASE];
+
+  let response: Response | null = null;
+
+  for (let i = 0; i < baseCandidates.length; i += 1) {
+    response = await fetch(`${baseCandidates[i]}${path}`, requestInit);
+
+    // In dev, a relative /api path can 404 if the app is served without Vite proxy.
+    // Retry once against the backend URL before surfacing the error.
+    if (response.status !== 404 || i === baseCandidates.length - 1) {
+      break;
+    }
+  }
+
+  if (!response) {
+    throw new Error("No response from server");
+  }
 
   const contentType = response.headers.get("content-type") || "";
   const data = contentType.includes("application/json")
