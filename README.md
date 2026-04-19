@@ -75,6 +75,14 @@ VITE_API_BASE_URL=/api
 VITE_API_PROXY_TARGET=http://localhost:5000
 ```
 
+For Netlify production deploys, set `VITE_API_BASE_URL` to your deployed backend URL (include `/api`).
+
+Example:
+
+```sh
+VITE_API_BASE_URL=https://your-backend-domain.com/api
+```
+
 Expected API routes:
 
 - `POST /api/auth/login`
