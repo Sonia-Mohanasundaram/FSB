@@ -7,3 +7,12 @@ services:
     buildCommand: npm ci
     startCommand: npm start
     autoDeploy: true
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: ADMIN_EMAIL
+        value: admin@ssnhospital.com
+      - key: ADMIN_PASSWORD
+        sync: false
