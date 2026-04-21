@@ -10,6 +10,10 @@ require("dotenv").config();
 const app = express();
 const PORT = Number(process.env.PORT || 5000);
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:8080";
+const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS || FRONTEND_ORIGIN)
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
 const MONGODB_URI = process.env.MONGODB_URI;
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@ssnhospital.com";
@@ -18,7 +22,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Admin@12345";
 const isDev = process.env.NODE_ENV !== "production";
 const isAllowedOrigin = (origin) => {
   if (!origin) return true;
-  if (origin === FRONTEND_ORIGIN) return true;
+  if (FRONTEND_ORIGINS.includes(origin)) return true;
   if (isDev && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return true;
   return false;
 };

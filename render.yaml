@@ -12,6 +12,8 @@ services:
         sync: false
       - key: FRONTEND_ORIGIN
         sync: false
+      - key: FRONTEND_ORIGINS
+        sync: false
       - key: ADMIN_EMAIL
         value: admin@ssnhospital.com
       - key: ADMIN_PASSWORD
