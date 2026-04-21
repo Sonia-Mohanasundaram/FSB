@@ -1,4 +1,11 @@
+<<<<<<< HEAD:src/services/api.ts
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
+=======
+const API_BASE = (
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? "/api" : "https://fsb-1.onrender.com/api")
+).replace(/\/$/, "");
+>>>>>>> 21ada80 (Fix: Use Render backend URL in production):FSD-PBL-main/src/services/api.ts
 const DEV_FALLBACK_API_BASE = (
   import.meta.env.VITE_DEV_FALLBACK_API_BASE_URL || "http://localhost:5000/api"
 ).replace(/\/$/, "");
